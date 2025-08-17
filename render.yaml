@@ -1,0 +1,26 @@
+services:
+  - type: web
+    name: mcp-demo
+    env: node
+    region: oregon
+    plan: free
+    runtime: node
+    buildCommand: "npm ci"
+    startCommand: "node http-server.mjs"
+    autoDeploy: true
+    healthCheckPath: "/mcp"
+    envVars:
+      - key: NODE_VERSION
+        value: "20"
+      - key: MCP_TOKEN         # optional auth; set a real value in the dashboard after first deploy
+        sync: false
+    disk:
+      name: mcp-cache
+      mountPath: /data
+    headers:
+      - path: /*
+        name: X-Frame-Options
+        value: DENY
+      - path: /*
+        name: X-Content-Type-Options
+        value: nosniff
